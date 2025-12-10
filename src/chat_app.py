@@ -42,11 +42,11 @@ from utils.message_utils import (
 # Agent Imports
 from app.tools.understandImage import get_image_description
 from services.agent_service import get_or_create_agent_processor
-from app.tools.singleAgentExample import generate_response
-# from app.tools.aiSearchTools import product_recommendations
-# from app.tools.imageCreationTool import create_image
-# from app.servers.mcp_inventory_server import mcp as inventory_mcp
-# from services.handoff_service import HandoffService
+# from app.tools.singleAgentExample import generate_response
+from app.tools.aiSearchTools import product_recommendations
+from app.tools.imageCreationTool import create_image
+from app.servers.mcp_inventory_server import mcp as inventory_mcp
+from services.handoff_service import HandoffService
 
 
 load_dotenv()
@@ -114,8 +114,8 @@ async def safe_operation(operation, fallback_value=None, operation_name="Unknown
 
 app = FastAPI()
 #set up MCP inventory server as a mounted app
-# inventory_mcp_app = inventory_mcp.sse_app()
-# app.mount("/mcp-inventory/", inventory_mcp_app)
+inventory_mcp_app = inventory_mcp.sse_app()
+app.mount("/mcp-inventory/", inventory_mcp_app)
 project_endpoint = os.environ.get("AZURE_AI_AGENT_ENDPOINT")
 if not project_endpoint:
     raise ValueError("AZURE_AI_AGENT_ENDPOINT environment variable is required")
@@ -124,18 +124,18 @@ project_client = AIProjectClient(
     credential=DefaultAzureCredential(),
 )
 
-# llm_client = AzureOpenAI(
-#     azure_endpoint=validated_env_vars['AZURE_OPENAI_ENDPOINT'],
-#     api_key=validated_env_vars['AZURE_OPENAI_KEY'],
-#     api_version=validated_env_vars['AZURE_OPENAI_API_VERSION'],
-# )
+llm_client = AzureOpenAI(
+    azure_endpoint=validated_env_vars['AZURE_OPENAI_ENDPOINT'],
+    api_key=validated_env_vars['AZURE_OPENAI_KEY'],
+    api_version=validated_env_vars['AZURE_OPENAI_API_VERSION'],
+)
 
-# handoff_service = HandoffService(
-#     azure_openai_client=llm_client,
-#     deployment_name=validated_env_vars['gpt_deployment'],
-#     default_domain="cora",
-#     lazy_classification=True
-# )
+handoff_service = HandoffService(
+    azure_openai_client=llm_client,
+    deployment_name=validated_env_vars['gpt_deployment'],
+    default_domain="cora",
+    lazy_classification=True
+)
 
 @app.get("/")
 async def get():
@@ -247,13 +247,13 @@ async def websocket_endpoint(websocket: WebSocket):
             
             #await websocket.send_text(fast_json_dumps({"answer": "This application is not yet ready to serve results. Please check back later.", "agent": None, "cart": persistent_cart}))
 
-            # Single-agent example
-            try:
-                response = generate_response(user_message)
-                await websocket.send_text(fast_json_dumps({"answer": response, "agent": "single", "cart": persistent_cart}))
-            except Exception as e:
-                logger.error("Error during single-agent response generation", exc_info=True)
-                await websocket.send_text(fast_json_dumps({"answer": "Error during single-agent response generation", "error": str(e), "cart": persistent_cart}))
+            ## Single-agent example
+            #try:
+            #    response = generate_response(user_message)
+            #    await websocket.send_text(fast_json_dumps({"answer": response, "agent": "single", "cart": persistent_cart}))
+            #except Exception as e:
+            #    logger.error("Error during single-agent response generation", exc_info=True)
+            #    await websocket.send_text(fast_json_dumps({"answer": "Error during single-agent response generation", "error": str(e), "cart": persistent_cart}))
 
             # # Multi-agent example with MCP inventory server and handoff service
             # # Run customer loyalty task only once when session starts
