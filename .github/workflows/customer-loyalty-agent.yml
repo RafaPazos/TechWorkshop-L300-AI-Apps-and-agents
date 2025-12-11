@@ -1,13 +1,8 @@
 name: Customer Loyalty Agent Deployment
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/app/agents/customerLoyaltyAgent_initializer.py'
-      - 'src/prompts/CustomerLoyaltyAgentPrompt.txt'
-      - 'src/app/tools/discountLogic.py'
+# Runs on pushes targeting the default branch
+  workflow_dispatch:
 
 jobs:
   deploy-agent:
