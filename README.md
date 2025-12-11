@@ -32,6 +32,8 @@ Any use of third-party trademarks or logos are subject to those third-party's po
 
 az acr login --name cioc3taqy6uiicosureg.azurecr.io
 
+docker build -t cioc3taqy6uiicosureg.azurecr.io/chat-app:latest .
+
 docker tag chat-app cioc3taqy6uiicosureg.azurecr.io/chat-app:latest
 
 docker push cioc3taqy6uiicosureg.azurecr.io/chat-app:latest
