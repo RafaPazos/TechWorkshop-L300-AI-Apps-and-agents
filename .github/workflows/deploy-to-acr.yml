@@ -1,11 +1,8 @@
 name: Deploy to Azure Container Registry
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
+  # Runs on pushes targeting the default branch
+  workflow_dispatch:
 
 env:
   REGISTRY_LOGIN_SERVER: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
