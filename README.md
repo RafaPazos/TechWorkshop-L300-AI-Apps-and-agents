@@ -27,3 +27,14 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+## notes
+
+az acr login --name cioc3taqy6uiicosureg.azurecr.io
+
+docker tag chat-app cioc3taqy6uiicosureg.azurecr.io/chat-app:latest
+
+docker push cioc3taqy6uiicosureg.azurecr.io/chat-app:latest
+
+
+
